@@ -44,7 +44,12 @@ app.put('/api/updateNews',jwt.verifyToken,(req,res)=>{
         if(err){
             res.json({"Result":false,"Msg":"Error occured, please check with administrator."});
         }else{
-            res.json({"Result":true,"Msg":"News updated successfully."});
+            if(rows.affectedRows>0){
+                res.json({"Result":true,"Msg":"News updated successfully."});
+            }else{
+                res.json({"Result":false,"Msg":"Record not found."});
+            }
+            
         }
     })
 });
@@ -57,6 +62,20 @@ app.delete('/api/deleteNews',jwt.verifyToken,(req,res)=>{
             res.json({"Result":true,"Msg":"News deleted successfully."});
         }
     })
+});
+
+app.put('/api/changePassword',jwt.verifyToken,(req,res)=>{
+    db.query("update admin set password=? where idadmin=?",[req.body.password,req.decoded.idu],(err,rows) =>{
+        if(err){
+            res.json({"Result":false,"Msg":"Error occured, please check with administrator."});
+        }else{
+            if(rows.affectedRows>0){
+                res.json({"Result":true,"Msg":"Password updated successfully."});
+            }else{
+                res.json({"Result":false,"Msg":"User not found."});
+            }
+        }
+    });
 });
 
 app.get('/',(req,res) => {

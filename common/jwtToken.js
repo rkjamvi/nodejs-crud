@@ -13,11 +13,14 @@ const verifyToken = (req,res,next) => {
             if(err){
                 res.json({"Result":err});
             }else{
-                req.isAdmin = decoded.idAdmin;
+                req.decoded = decoded;
                 next();
             }
         })
     }
 }
 
-module.exports = {signToken,verifyToken}
+module.exports = {
+    signToken,
+    verifyToken
+}
